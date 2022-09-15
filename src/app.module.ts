@@ -5,6 +5,9 @@ import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PlanksModule } from './planks/planks.module';
 import { DaysModule } from './days/days.module';
+import { AvatarsController } from './avatars/avatars.controller';
+import { AvatarsModule } from './avatars/avatars.module';
+import { FriendsModule } from './friends/friends.module';
 import dbConfiguration from './config/db.config';
 @Module({
   imports: [
@@ -20,8 +23,10 @@ import dbConfiguration from './config/db.config';
     }),
     PlanksModule,
     DaysModule,
+    AvatarsModule,
+    FriendsModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, AvatarsController],
   providers: [AppService],
 })
 export class AppModule {}

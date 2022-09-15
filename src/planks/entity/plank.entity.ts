@@ -15,6 +15,7 @@ export class Plank extends BaseEntity {
 
   @ManyToOne(() => Day, (day) => day.planks, {
     cascade: true,
+    onDelete: 'CASCADE',
   })
   day: Day;
 

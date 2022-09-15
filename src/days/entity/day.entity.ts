@@ -46,6 +46,7 @@ export class Day extends BaseEntity {
 
   @ManyToOne(() => User, (user) => user.days, {
     cascade: true,
+    onDelete: 'CASCADE',
   })
   user: User;
 

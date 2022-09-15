@@ -1,9 +1,12 @@
+import { Avatar } from 'src/avatars/entity/avatar.entity';
 import { Day } from 'src/days/entity/day.entity';
+import { Friend } from 'src/friends/entity/friend.entity';
 import {
   BaseEntity,
   Column,
   Entity,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Bool, Genders, ProfileStatus, Units } from 'types';
@@ -96,4 +99,13 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Day, (day) => day.user)
   days: Day[];
+
+  @OneToOne(() => Avatar, (avatar) => avatar.user)
+  avatar: Avatar;
+
+  @OneToMany(() => Friend, (friend) => friend.friendReceived)
+  friendsReceived: Friend[];
+
+  @OneToMany(() => Friend, (friend) => friend.friendInvited)
+  friendsInvited: Friend[];
 }
