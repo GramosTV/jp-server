@@ -11,13 +11,8 @@ export class AppController {
     private authService: AuthService,
   ) {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
-  }
-
   @UseGuards(LocalAuthGuard)
-  @Post('auth/login')
+  @Post('/auth/login')
   async login(@Request() req) {
     return this.authService.login(req.user);
   }
