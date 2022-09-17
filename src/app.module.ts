@@ -8,6 +8,7 @@ import { DaysModule } from './days/days.module';
 import { AvatarsController } from './avatars/avatars.controller';
 import { AvatarsModule } from './avatars/avatars.module';
 import { FriendsModule } from './friends/friends.module';
+import { AuthModule } from './auth/auth.module';
 import dbConfiguration from './config/db.config';
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import dbConfiguration from './config/db.config';
     DaysModule,
     AvatarsModule,
     FriendsModule,
+    AuthModule,
   ],
   controllers: [AppController, AvatarsController],
   providers: [AppService],
