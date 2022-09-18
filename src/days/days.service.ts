@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Between, LessThan, Repository } from 'typeorm';
+import { Between, LessThan, RemoveOptions, Repository, SaveOptions } from 'typeorm';
+import { Bool } from 'types';
 import { Day } from './entity/day.entity';
 
 @Injectable()
@@ -23,4 +24,28 @@ export class DaysService {
     });
     return res;
   }
-}
+
+  async findLatestOne(id: string) {
+    const res = await Day.find({
+      where: { user: { id: id } },
+      order: { numeration: 'DESC' },
+      take: 1,
+    });
+    return res;
+  }
+
+//   async addOne(id: string) {
+//     const latestDay = await this.findLatestOne(id);
+//     if (latestDay[0]?.isFinished === Bool.false) {
+//       return "You haven't finished your previous day";
+//       //CUSTOM ERROR TODO
+//     }
+//     if (
+//       new Date().getTime() - new Date(latestDay[0]?.createdAt).getTime() <
+//       86400000
+//     ) {
+//       return 'A new day has not begun yet';
+//     }
+//   }
+// }
+

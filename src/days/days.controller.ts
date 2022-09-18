@@ -23,4 +23,10 @@ export class DaysController {
   ) {
     return this.daysService.findOne(req.user.id, numeration);
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/latest')
+  async findLatestOne(@Request() req) {
+    return this.daysService.findLatestOne(req.user.id);
+  }
 }
