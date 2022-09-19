@@ -1,4 +1,13 @@
-import { Controller, Get, Param, Request, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpException,
+  HttpStatus,
+  Param,
+  Post,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { ParseIntMinMaxPipe } from 'src/pipes/parseIntMinMax.pipe';
 import { DaysService } from './days.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -28,5 +37,21 @@ export class DaysController {
   @Get('/latest')
   async findLatestOne(@Request() req) {
     return this.daysService.findLatestOne(req.user.id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('/')
+  async InsertOne(@Request() req) {
+    const res = await this.daysService.insertOne(req.user.id);
+    if (typeof res === 'string') {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error: res,
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    return res;
   }
 }
