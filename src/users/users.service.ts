@@ -11,4 +11,8 @@ export class UsersService {
   async findOne(email: string): Promise<User | undefined> {
     return await User.findOneBy({ email });
   }
+
+  async findOneById(id: string): Promise<User | undefined> {
+    return await User.findOneBy({ id });
+  }
 }
