@@ -1,3 +1,4 @@
+import { PlanksService } from './../planks/planks.service';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/entity/user.entity';
@@ -17,11 +18,12 @@ export class DaysService {
   constructor(
     @InjectRepository(Day) private dayRepository: Repository<Day>,
     private usersService: UsersService,
+    private planksService: PlanksService,
   ) {}
 
   async findMany(id: string, numeration: number) {
     const res = await Day.find({
-      where: { user: { id: id }, numeration: LessThan(numeration) },
+      where: { user: { id }, numeration: LessThan(numeration) },
       order: { numeration: 'DESC' },
       take: 10,
     });
@@ -30,7 +32,7 @@ export class DaysService {
 
   async findOne(id: string, numeration: number) {
     const res = await Day.findOneBy({
-      user: { id: id },
+      user: { id },
       numeration: numeration,
     });
     return res;
@@ -38,7 +40,7 @@ export class DaysService {
 
   async findLatestOne(id: string) {
     const res = await Day.find({
-      where: { user: { id: id } },
+      where: { user: { id } },
       order: { numeration: 'DESC' },
       take: 1,
     });
@@ -47,7 +49,7 @@ export class DaysService {
 
   async InsertOne(id: string) {
     const res = await Day.find({
-      where: { user: { id: id } },
+      where: { user: { id } },
       order: { numeration: 'DESC' },
       take: 1,
     });
@@ -88,5 +90,11 @@ export class DaysService {
 
     await day.save();
     return numeration;
+  }
+
+  async finishDay(id: string, weight: number, finish: number) {
+    const day = await this.findLatestOne(id);
+    const planks = await this.planksService.getMany(id, 65535);
+    return planks;
   }
 }
