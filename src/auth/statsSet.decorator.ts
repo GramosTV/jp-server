@@ -3,14 +3,15 @@ import {
   CanActivate,
   ExecutionContext,
   ConflictException,
+  Inject,
+  forwardRef,
 } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
 import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class StatsSetGuard implements CanActivate {
   constructor(
-    private reflector: Reflector,
+    @Inject(forwardRef(() => UsersService))
     private usersService: UsersService,
   ) {}
 

@@ -65,5 +65,6 @@ export class DaysController {
   ) {
     const res = await this.daysService.finishDay(req.user.id, weight, 1);
     return res;
+    //IN PROGRESS
   }
 }

@@ -1,8 +1,8 @@
 import { PlanksService } from './../planks/planks.service';
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/users/entity/user.entity';
-import { UsersService } from 'src/users/users.service';
+import { User } from '../users/entity/user.entity';
+import { UsersService } from '../users/users.service';
 import {
   Between,
   LessThan,
@@ -18,6 +18,7 @@ export class DaysService {
   constructor(
     @InjectRepository(Day) private dayRepository: Repository<Day>,
     private usersService: UsersService,
+    @Inject(forwardRef(() => PlanksService))
     private planksService: PlanksService,
   ) {}
 
@@ -39,10 +40,9 @@ export class DaysService {
   }
 
   async findLatestOne(id: string) {
-    const res = await Day.find({
+    const res = await Day.findOne({
       where: { user: { id } },
       order: { numeration: 'DESC' },
-      take: 1,
     });
     return res;
   }
@@ -96,5 +96,6 @@ export class DaysService {
     const day = await this.findLatestOne(id);
     const planks = await this.planksService.getMany(id, 65535);
     return planks;
+    //IN PROGRESS
   }
 }
