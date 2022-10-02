@@ -1,5 +1,11 @@
 import { PlanksService } from './../planks/planks.service';
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import {
+  forwardRef,
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../users/entity/user.entity';
 import { UsersService } from '../users/users.service';
@@ -47,34 +53,42 @@ export class DaysService {
     return res;
   }
 
-  async InsertOne(id: string) {
-    const res = await Day.find({
-      where: { user: { id } },
-      order: { numeration: 'DESC' },
-      take: 1,
-    });
-    return res;
-  }
-
   async insertOne(id: string) {
     const latestDay = await this.findLatestOne(id);
     console.log(latestDay);
     if (!latestDay[0]?.isFinished) {
-      return "You haven't finished your previous day";
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error: "You haven't finished your previous day",
+        },
+        HttpStatus.BAD_REQUEST,
+      );
     }
     if (
       new Date().getTime() - new Date(latestDay[0]?.createdAt).getTime() <
       86400000
     ) {
-      return 'A new day has not begun yet';
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error: 'A new day has not begun yet',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     const numeration = ++latestDay[0].numeration || 1;
     const { weight, statsSet } = await this.usersService.findOneById(id);
     if (!statsSet) {
-      return "You haven't set your stats";
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error: "You haven't set your stats",
+        },
+        HttpStatus.BAD_REQUEST,
+      );
     }
-    //Create stats set guard decorator TO DO
 
     const day = new Day();
     const user = new User();

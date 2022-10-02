@@ -45,15 +45,6 @@ export class DaysController {
   @Post('/')
   async InsertOne(@Request() req) {
     const res = await this.daysService.insertOne(req.user.id);
-    if (typeof res === 'string') {
-      throw new HttpException(
-        {
-          status: HttpStatus.BAD_REQUEST,
-          error: res,
-        },
-        HttpStatus.BAD_REQUEST,
-      );
-    }
     return res;
   }
 
