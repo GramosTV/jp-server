@@ -17,8 +17,9 @@ import {
   Repository,
   SaveOptions,
 } from 'typeorm';
-import { Bool } from 'types';
+import { Bool, Genders } from 'types';
 import { Day } from './entity/day.entity';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class DaysService {
@@ -113,5 +114,28 @@ export class DaysService {
     const planks = await this.planksService.getMany(id, 65535);
     return planks;
     //IN PROGRESS
+  }
+
+  async getAveragePlankTime(gender: Genders) {
+    const value = await this.cacheManager.get(
+      `average${Genders[gender]}PlankTime`,
+    );
+    if (value) {
+      return value;
+    } else {
+      const days = await Day.find({ where: { user: { gender } } });
+      const bestPlankTimes = days.map((day) => {
+        return day.bestPlankTime;
+      });
+      const sum = bestPlankTimes.reduce((a, b) => a + b, 0);
+      const avg = sum / bestPlankTimes.length || 0;
+      const result = Math.round(avg);
+      await this.cacheManager.set(
+        `average${Genders[gender]}PlankTime`,
+        result,
+        { ttl: 43200 },
+      );
+      return result;
+    }
   }
 }
