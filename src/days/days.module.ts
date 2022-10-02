@@ -1,4 +1,4 @@
-import { forwardRef, Module } from '@nestjs/common';
+import { CacheModule, forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PlanksModule } from '../planks/planks.module';
 import { UsersModule } from '../users/users.module';
@@ -11,6 +11,7 @@ import { Day } from './entity/day.entity';
     UsersModule,
     forwardRef(() => PlanksModule),
     TypeOrmModule.forFeature([Day]),
+    CacheModule.register(),
   ],
   controllers: [DaysController],
   providers: [DaysService],

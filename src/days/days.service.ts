@@ -1,5 +1,6 @@
 import { PlanksService } from './../planks/planks.service';
 import {
+  CACHE_MANAGER,
   forwardRef,
   HttpException,
   HttpStatus,
@@ -26,6 +27,7 @@ export class DaysService {
     private usersService: UsersService,
     @Inject(forwardRef(() => PlanksService))
     private planksService: PlanksService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   async findMany(id: string, numeration: number) {
