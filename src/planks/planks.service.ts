@@ -41,4 +41,21 @@ export class PlanksService {
       return await Plank.delete({ day: { id: latestDay.id }, numeration });
     }
   }
+
+  async getLatest(id: string, dayId: string) {
+    const day = await Day.findOne({ where: { user: { id }, id: dayId } });
+    if (!day) {
+      throw new HttpException(
+        {
+          status: HttpStatus.FORBIDDEN,
+          error: 'Invalid dayId',
+        },
+        HttpStatus.FORBIDDEN,
+      );
+    }
+    return await Plank.findOne({
+      where: { day: { id: dayId } },
+      order: { numeration: 'DESC' },
+    });
+  }
 }
