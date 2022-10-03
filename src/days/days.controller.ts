@@ -25,7 +25,7 @@ export class DaysController {
     @Request() req,
     @Param('numeration', new ParseIntMinMaxPipe(2, 65535)) numeration: number,
   ) {
-    return this.daysService.findMany(req.user.id, numeration);
+    return await this.daysService.findMany(req.user.id, numeration);
   }
 
   @UseGuards(JwtAuthGuard, StatsSetGuard)
@@ -34,13 +34,13 @@ export class DaysController {
     @Request() req,
     @Param('numeration', new ParseIntMinMaxPipe(1, 65535)) numeration: number,
   ) {
-    return this.daysService.findOne(req.user.id, numeration);
+    return await this.daysService.findOne(req.user.id, numeration);
   }
 
   @UseGuards(JwtAuthGuard, StatsSetGuard)
   @Get('/latest')
   async findLatestOne(@Request() req) {
-    return this.daysService.findLatestOne(req.user.id);
+    return await this.daysService.findLatestOne(req.user.id);
   }
 
   @UseGuards(JwtAuthGuard, StatsSetGuard)
@@ -67,6 +67,12 @@ export class DaysController {
     @Param('gender', new enumPipe(Genders))
     gender: Genders,
   ) {
-    return this.daysService.getAveragePlankTime(gender);
+    return await this.daysService.getAveragePlankTime(gender);
+  }
+
+  @UseGuards(JwtAuthGuard, StatsSetGuard)
+  @Get('/bestPlankTime')
+  async getBestPlankTime(@Request() req) {
+    return await this.daysService.getBestPlankTime(req.user.id);
   }
 }

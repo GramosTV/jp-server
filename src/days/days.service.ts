@@ -138,4 +138,12 @@ export class DaysService {
       return result;
     }
   }
+
+  async getBestPlankTime(id: string) {
+    const day = await Day.findOne({
+      where: { user: { id } },
+      order: { bestPlankTime: 'DESC' },
+    });
+    return day?.bestPlankTime || 0;
+  }
 }
