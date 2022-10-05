@@ -1,17 +1,17 @@
 import { Bool } from 'types';
 export enum Units {
-  Metric,
-  Imperial,
+  Metric = '0',
+  Imperial = '1',
 }
 
 export enum Genders {
-  Male,
-  Female,
+  Male = '0',
+  Female = '1',
 }
 export enum ProfileStatus {
-  Private,
-  FriendsOnly,
-  Public,
+  Private = '0',
+  FriendsOnly = '1',
+  Public = '2',
 }
 
 export interface User {
