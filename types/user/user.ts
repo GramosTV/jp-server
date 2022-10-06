@@ -1,15 +1,15 @@
 import { Bool } from 'types';
 export enum Units {
-  Metric = '0',
+  Metric = '',
   Imperial = '1',
 }
 
 export enum Genders {
-  Male = '0',
+  Male = '',
   Female = '1',
 }
 export enum ProfileStatus {
-  Private = '0',
+  Private = '',
   FriendsOnly = '1',
   Public = '2',
 }
