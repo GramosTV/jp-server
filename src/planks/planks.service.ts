@@ -10,6 +10,8 @@ import { DaysService } from '../days/days.service';
 import { Day } from '../days/entity/day.entity';
 import { Repository } from 'typeorm';
 import { Plank } from './entity/plank.entity';
+import { User } from 'src/users/entity/user.entity';
+import { Bool } from 'types';
 
 @Injectable()
 export class PlanksService {
@@ -42,7 +44,7 @@ export class PlanksService {
     }
   }
 
-  async getLatest(id: string, dayId: string) {
+  async findLatestOne(id: string, dayId: string) {
     const day = await Day.findOne({ where: { user: { id }, id: dayId } });
     if (!day) {
       throw new HttpException(
@@ -57,5 +59,32 @@ export class PlanksService {
       where: { day: { id: dayId } },
       order: { numeration: 'DESC' },
     });
+  }
+
+  async addPlank(id: string, plankTime: number, caloriesBurnt: number) {
+    const latestDay = await this.daysService.findLatestOne(id);
+    if (latestDay?.isFinished) {
+      const latestPlank = await Plank.findOne({
+        where: { day: { id: latestDay.id } },
+        order: { numeration: 'DESC' },
+      });
+      const plank = new Plank();
+      plank.numeration =
+        latestPlank?.numeration < 50 ? ++latestPlank.numeration : 1;
+      plank.caloriesBurnt = caloriesBurnt;
+      plank.plankTime = plankTime;
+      plank.day = latestDay;
+      plank.duel = Bool.false;
+
+      await plank.save();
+    } else {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error: "You don't have an ongoing day",
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 }

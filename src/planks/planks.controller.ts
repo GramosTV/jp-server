@@ -3,6 +3,7 @@ import {
   Delete,
   Get,
   Param,
+  Post,
   Request,
   UseGuards,
 } from '@nestjs/common';
@@ -27,6 +28,20 @@ export class PlanksController {
   @UseGuards(JwtAuthGuard, StatsSetGuard)
   @Get('/latest/:dayId')
   async getLatest(@Request() req, @Param('dayId') dayId: string) {
-    return await this.planksService.getLatest(req.user.id, dayId);
+    return await this.planksService.findLatestOne(req.user.id, dayId);
+  }
+
+  @UseGuards(JwtAuthGuard, StatsSetGuard)
+  @Post('/:plankTime/:caloriesBurnt')
+  async addPlank(
+    @Request() req,
+    @Param('plankTime') plankTime: number,
+    @Param('caloriesBurnt') caloriesBurnt: number,
+  ) {
+    return await this.planksService.addPlank(
+      req.user.id,
+      plankTime,
+      caloriesBurnt,
+    );
   }
 }
