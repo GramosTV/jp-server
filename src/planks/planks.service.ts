@@ -34,10 +34,10 @@ export class PlanksService {
     if (latestDay.isFinished) {
       throw new HttpException(
         {
-          status: HttpStatus.BAD_REQUEST,
+          status: HttpStatus.CONFLICT,
           error: "You don't have an ongoing day",
         },
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.CONFLICT,
       );
     } else {
       return await Plank.delete({ day: { id: latestDay.id }, numeration });
@@ -69,8 +69,16 @@ export class PlanksService {
         order: { numeration: 'DESC' },
       });
       const plank = new Plank();
-      plank.numeration =
-        latestPlank?.numeration < 50 ? ++latestPlank.numeration : 1;
+      if (latestPlank.numeration === 50) {
+        throw new HttpException(
+          {
+            status: HttpStatus.CONFLICT,
+            error: "You don't have an ongoing day",
+          },
+          HttpStatus.CONFLICT,
+        );
+      }
+      plank.numeration = latestPlank?.numeration ? ++latestPlank.numeration : 1;
       plank.caloriesBurnt = caloriesBurnt;
       plank.plankTime = plankTime;
       plank.day = latestDay;
@@ -80,10 +88,10 @@ export class PlanksService {
     } else {
       throw new HttpException(
         {
-          status: HttpStatus.BAD_REQUEST,
+          status: HttpStatus.CONFLICT,
           error: "You don't have an ongoing day",
         },
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.CONFLICT,
       );
     }
   }

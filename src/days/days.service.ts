@@ -62,10 +62,10 @@ export class DaysService {
     if (!latestDay[0]?.isFinished) {
       throw new HttpException(
         {
-          status: HttpStatus.BAD_REQUEST,
+          status: HttpStatus.CONFLICT,
           error: "You haven't finished your previous day",
         },
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.CONFLICT,
       );
     }
     if (
@@ -74,24 +74,15 @@ export class DaysService {
     ) {
       throw new HttpException(
         {
-          status: HttpStatus.BAD_REQUEST,
+          status: HttpStatus.CONFLICT,
           error: 'A new day has not begun yet',
         },
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.CONFLICT,
       );
     }
 
     const numeration = ++latestDay[0].numeration || 1;
-    const { weight, statsSet } = await this.usersService.findOneById(id);
-    if (!statsSet) {
-      throw new HttpException(
-        {
-          status: HttpStatus.BAD_REQUEST,
-          error: "You haven't set your stats",
-        },
-        HttpStatus.BAD_REQUEST,
-      );
-    }
+    const { weight } = await this.usersService.findOneById(id);
 
     const day = new Day();
     const user = new User();
