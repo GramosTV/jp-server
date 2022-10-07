@@ -13,7 +13,7 @@ export class ParseIntMinMaxPipe implements PipeTransform<string, number> {
     this.min = min;
     this.max = max;
   }
-  transform(value: string, metadata: ArgumentMetadata): number | null {
+  transform(value: string, metadata: ArgumentMetadata): number {
     const val = Math.floor(parseInt(value));
     if (isNaN(val) || val < this.min || val > this.max) {
       throw new BadRequestException('Validation failed');
