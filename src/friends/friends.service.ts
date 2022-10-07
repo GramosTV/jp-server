@@ -18,4 +18,8 @@ export class FriendsService {
       ],
     });
   }
+
+  async acceptFriendRequest(id: string, name: string) {
+    return 'TODO';
+  }
 }
