@@ -84,7 +84,7 @@ export class PlanksService {
       plank.day = latestDay;
       plank.duel = Bool.false;
 
-      await plank.save();
+      return await plank.save();
     } else {
       throw new HttpException(
         {
