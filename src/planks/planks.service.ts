@@ -61,7 +61,7 @@ export class PlanksService {
     });
   }
 
-  async addPlank(id: string, plankTime: number, caloriesBurnt: number) {
+  async insertOne(id: string, plankTime: number, caloriesBurnt: number) {
     const latestDay = await this.daysService.findLatestOne(id);
     if (latestDay?.isFinished) {
       const latestPlank = await Plank.findOne({
@@ -69,11 +69,11 @@ export class PlanksService {
         order: { numeration: 'DESC' },
       });
       const plank = new Plank();
-      if (latestPlank.numeration === 50) {
+      if (latestPlank?.numeration === 50) {
         throw new HttpException(
           {
             status: HttpStatus.CONFLICT,
-            error: "You don't have an ongoing day",
+            error: 'You have reached the maximum amount of planks',
           },
           HttpStatus.CONFLICT,
         );

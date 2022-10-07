@@ -33,12 +33,13 @@ export class PlanksController {
 
   @UseGuards(JwtAuthGuard, StatsSetGuard)
   @Post('/:plankTime/:caloriesBurnt')
-  async addPlank(
+  async insertOne(
     @Request() req,
-    @Param('plankTime') plankTime: number,
-    @Param('caloriesBurnt') caloriesBurnt: number,
+    @Param('plankTime', new ParseIntMinMaxPipe(1, 16777215)) plankTime: number,
+    @Param('caloriesBurnt', new ParseIntMinMaxPipe(1, 65535))
+    caloriesBurnt: number,
   ) {
-    return await this.planksService.addPlank(
+    return await this.planksService.insertOne(
       req.user.id,
       plankTime,
       caloriesBurnt,
