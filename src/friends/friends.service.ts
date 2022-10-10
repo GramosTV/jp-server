@@ -22,4 +22,11 @@ export class FriendsService {
   async acceptFriendRequest(id: string, name: string) {
     return 'TODO';
   }
+
+  async getFriendRequestsAmount(id: string) {
+    return await Friend.countBy({
+      friendReceived: { id },
+      accepted: Bool.false,
+    });
+  }
 }

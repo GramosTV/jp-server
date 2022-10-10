@@ -29,4 +29,10 @@ export class FriendsController {
   ) {
     return await this.friendsService.acceptFriendRequest(req.user.id, name);
   }
+
+  @UseGuards(JwtAuthGuard, StatsSetGuard)
+  @Get('/friendRequestsAmount')
+  async getFriendRequestsAmount(@Request() req) {
+    return await this.friendsService.getFriendRequestsAmount(req.user.id);
+  }
 }
