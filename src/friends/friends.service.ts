@@ -29,4 +29,21 @@ export class FriendsService {
       accepted: Bool.false,
     });
   }
+
+  async checkIfAreFriends(id: string, profileId: string) {
+    return await Friend.count({
+      where: [
+        {
+          friendReceived: { id },
+          friendInvited: { id: profileId },
+          accepted: Bool.true,
+        },
+        {
+          friendReceived: { id: profileId },
+          friendInvited: { id },
+          accepted: Bool.true,
+        },
+      ],
+    });
+  }
 }
