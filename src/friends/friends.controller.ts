@@ -35,4 +35,13 @@ export class FriendsController {
   async getFriendRequestsAmount(@Request() req) {
     return await this.friendsService.getFriendRequestsAmount(req.user.id);
   }
+
+  @UseGuards(JwtAuthGuard, StatsSetGuard)
+  @Get('/checkIfAreFriends/:profileId')
+  async checkIfAreFriends(
+    @Request() req,
+    @Param('profileId', new ParseStringMinMaxPipe(36, 36)) profileId: string,
+  ) {
+    return await this.friendsService.checkIfAreFriends(req.user.id, profileId);
+  }
 }
