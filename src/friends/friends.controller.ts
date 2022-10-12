@@ -1,5 +1,6 @@
 import {
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -43,5 +44,14 @@ export class FriendsController {
     @Param('profileId', new ParseStringMinMaxPipe(36, 36)) profileId: string,
   ) {
     return await this.friendsService.checkIfAreFriends(req.user.id, profileId);
+  }
+
+  @UseGuards(JwtAuthGuard, StatsSetGuard)
+  @Delete('/unfriend/:name')
+  async unfriend(
+    @Request() req,
+    @Param('name', new ParseStringMinMaxPipe(3, 25)) name: string,
+  ) {
+    return await this.friendsService.unfriend(req.user.id, name);
   }
 }
