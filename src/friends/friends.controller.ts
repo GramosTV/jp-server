@@ -54,4 +54,13 @@ export class FriendsController {
   ) {
     return await this.friendsService.unfriend(req.user.id, name);
   }
+
+  @UseGuards(JwtAuthGuard, StatsSetGuard)
+  @Delete('/declineFriendRequest/:name')
+  async declineFriendRequest(
+    @Request() req,
+    @Param('name', new ParseStringMinMaxPipe(3, 25)) name: string,
+  ) {
+    return await this.friendsService.declineFriendRequest(req.user.id, name);
+  }
 }

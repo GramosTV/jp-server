@@ -85,4 +85,36 @@ export class FriendsService {
     }
     return await Friend.remove(relation);
   }
+
+  async declineFriendRequest(id: string, name: string) {
+    const friend = await this.usersService.findOneByName(name);
+    if (!friend) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: "There's no user with that name",
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    const relation = await Friend.findOne({
+      where: [
+        {
+          friendReceived: { id },
+          friendInvited: { id: friend.id },
+          accepted: Bool.false,
+        },
+      ],
+    });
+    if (!relation) {
+      throw new HttpException(
+        {
+          status: HttpStatus.CONFLICT,
+          error: "You don't have a pending invite from that user",
+        },
+        HttpStatus.CONFLICT,
+      );
+    }
+    return await Friend.remove(relation);
+  }
 }
