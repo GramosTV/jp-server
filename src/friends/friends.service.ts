@@ -22,7 +22,42 @@ export class FriendsService {
   }
 
   async acceptFriendRequest(id: string, name: string) {
-    return 'TODO';
+    const friend = await this.usersService.findOneByName(name);
+    if (!friend) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: "There's no user with that name",
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    const relation = await Friend.findOne({
+      where: [
+        {
+          friendReceived: { id },
+          friendInvited: { id: friend.id },
+          accepted: Bool.false,
+        },
+      ],
+      relations: {
+        friendReceived: true,
+        friendInvited: true,
+      },
+    });
+    if (!relation) {
+      throw new HttpException(
+        {
+          status: HttpStatus.CONFLICT,
+          error: 'You have no pending invite from user',
+        },
+        HttpStatus.CONFLICT,
+      );
+    }
+
+    relation.accepted = Bool.true;
+    await Friend.save(relation);
+    return Bool.true;
   }
 
   async getFriendRequestsAmount(id: string) {
