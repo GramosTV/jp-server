@@ -21,7 +21,9 @@ export class DecimalPipe implements PipeTransform<string, number> {
       isNaN(val) ||
       val < this.min ||
       val > this.max ||
-      String(val).split('.')[1].length > this.maxAfterDot
+      String(val).split('.')[1]
+        ? String(val).split('.')[1].length > this.maxAfterDot
+        : false
     ) {
       throw new BadRequestException('Validation failed');
     }
