@@ -59,7 +59,7 @@ export class Day extends BaseEntity {
   @Column({
     type: 'datetime',
   })
-  dateOfBirth: Date;
+  createdAt: Date;
 
   @OneToMany(() => Plank, (plank) => plank.day)
   planks: Plank[];
