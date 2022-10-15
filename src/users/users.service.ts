@@ -18,4 +18,5 @@ export class UsersService {
   async findOneByName(name: string): Promise<User | undefined> {
     return await User.findOneBy({ name });
   }
+
 }
