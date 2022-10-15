@@ -24,4 +24,9 @@ export class UsersService {
   async changeHeight(id: string, height: number) {
     return (await User.update(id, { height })).affected;
   }
+
+  async findOneByName(name: string): Promise<User | undefined> {
+    return await User.findOneBy({ name });
+  }
+
 }

@@ -17,7 +17,6 @@ import { enumPipe } from 'src/pipes/enum.pipe';
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
-
   @UseGuards(JwtAuthGuard, statsSetGuard)
   @Patch('/changeUnit/:unit')
   async changeUnit(
@@ -37,4 +36,5 @@ export class UsersController {
   ) {
     return await this.usersService.changeHeight(req.user.id, height);
   }
+
 }
