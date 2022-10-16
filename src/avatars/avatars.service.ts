@@ -10,4 +10,8 @@ export class AvatarsService {
     @InjectRepository(Avatar) private avatarRepository: Repository<Avatar>,
     private usersService: UsersService,
   ) {}
+
+  async findOne(id: string) {
+    return await Avatar.findOne({ where: { user: { id } } });
+  }
 }
