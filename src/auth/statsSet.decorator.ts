@@ -1,17 +1,26 @@
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
+import {
+  Injectable,
+  CanActivate,
+  ExecutionContext,
+  ConflictException,
+  Inject,
+  forwardRef,
+} from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 
 @Injectable()
-export class statsSetGuard implements CanActivate {
+export class StatsSetGuard implements CanActivate {
   constructor(
-    private reflector: Reflector,
+    @Inject(forwardRef(() => UsersService))
     private usersService: UsersService,
   ) {}
 
   async canActivate(ctx: ExecutionContext) {
     const request = ctx.switchToHttp().getRequest();
     const { statsSet } = await this.usersService.findOneById(request.user.id);
+    if (!statsSet) {
+      throw new ConflictException();
+    }
     return !!statsSet;
   }
 }
