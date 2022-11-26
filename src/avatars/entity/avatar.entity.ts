@@ -3,6 +3,7 @@ import {
   BaseEntity,
   Column,
   Entity,
+  JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -16,6 +17,7 @@ export class Avatar extends BaseEntity {
     cascade: true,
     onDelete: 'CASCADE',
   })
+  @JoinColumn()
   user: User;
 
   @Column({
