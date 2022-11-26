@@ -1,7 +1,14 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import {
+  forwardRef,
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { Bool } from 'types';
 @Injectable()
 export class AuthService {
   constructor(
@@ -23,6 +30,26 @@ export class AuthService {
   }
 
   async login(user: any) {
+    const payload = { email: user.email, sub: user.id };
+    return {
+      access_token: this.jwtService.sign(payload),
+    };
+  }
+
+  async googleLogin(user: any) {
+    const registeredUser = await this.usersService.findOne(user.email);
+    if (registeredUser?.isGoogleAccount === Bool.false) {
+      throw new HttpException(
+        {
+          status: HttpStatus.CONFLICT,
+          error: 'This email is already taken',
+        },
+        HttpStatus.CONFLICT,
+      );
+    }
+    if (!registeredUser) {
+      //ADD USER
+    }
     const payload = { email: user.email, sub: user.id };
     return {
       access_token: this.jwtService.sign(payload),

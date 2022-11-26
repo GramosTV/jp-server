@@ -8,7 +8,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { statsSetGuard } from 'src/auth/statsSet.decorator';
+import { StatsSetGuard } from 'src/auth/statsSet.decorator';
 import { UsersService } from './users.service';
 import { DecimalPipe } from 'src/pipes/decimal.pipe';
 import { Units } from 'types';
@@ -17,7 +17,7 @@ import { enumPipe } from 'src/pipes/enum.pipe';
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
-  @UseGuards(JwtAuthGuard, statsSetGuard)
+  @UseGuards(JwtAuthGuard, StatsSetGuard)
   @Patch('/changeUnit/:unit')
   async changeUnit(
     @Request() req,
@@ -27,7 +27,7 @@ export class UsersController {
     return await this.usersService.changeUnit(req.user.id, unit);
   }
 
-  @UseGuards(JwtAuthGuard, statsSetGuard)
+  @UseGuards(JwtAuthGuard, StatsSetGuard)
   @Patch('/changeHeight/:height')
   async changeHeight(
     @Request() req,
@@ -36,5 +36,4 @@ export class UsersController {
   ) {
     return await this.usersService.changeHeight(req.user.id, height);
   }
-
 }
