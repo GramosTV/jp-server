@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Units } from 'types';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -29,4 +30,7 @@ export class UsersService {
     return await User.findOneBy({ name });
   }
 
+  async addUser(createUserDto: CreateUserDto) {
+    return await User.insert(createUserDto);
+  }
 }
