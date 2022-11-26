@@ -47,10 +47,18 @@ export class AuthService {
         HttpStatus.CONFLICT,
       );
     }
+    let payload = {};
     if (!registeredUser) {
-      //ADD USER
+      await this.usersService.addUser({
+        email: user.email,
+        password: '000',
+        name: user.name,
+      });
+      const addedUser = await this.usersService.findOne(user.email);
+      payload = { email: user.email, sub: addedUser.id };
+    } else {
+      payload = { email: registeredUser.email, sub: registeredUser.id };
     }
-    const payload = { email: user.email, sub: user.id };
     return {
       access_token: this.jwtService.sign(payload),
     };

@@ -17,7 +17,7 @@ export class UsersService {
   async findOneById(id: string): Promise<User | undefined> {
     return await User.findOneBy({ id });
   }
-  
+
   async changeUnit(id: string, unit: Units) {
     return (await User.update(id, { unit })).affected;
   }
