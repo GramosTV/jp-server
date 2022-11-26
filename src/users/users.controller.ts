@@ -1,9 +1,11 @@
 import { ParseIntMinMaxPipe } from './../pipes/parseIntMinMax.pipe';
 import {
+  Body,
   Controller,
   Get,
   Param,
   Patch,
+  Post,
   Request,
   UseGuards,
 } from '@nestjs/common';
@@ -13,6 +15,7 @@ import { UsersService } from './users.service';
 import { DecimalPipe } from 'src/pipes/decimal.pipe';
 import { Units } from 'types';
 import { enumPipe } from 'src/pipes/enum.pipe';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Controller('users')
 export class UsersController {
@@ -35,5 +38,10 @@ export class UsersController {
     height: number,
   ) {
     return await this.usersService.changeHeight(req.user.id, height);
+  }
+
+  @Post('/')
+  async addUser(@Body() createUserDto: CreateUserDto) {
+    return await this.usersService.addUser(createUserDto);
   }
 }
