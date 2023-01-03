@@ -11,6 +11,7 @@ import { FriendsModule } from './friends/friends.module';
 import { AuthModule } from './auth/auth.module';
 import dbConfiguration from './config/db.config';
 import { UsersModule } from './users/users.module';
+import { MailModule } from './mail/mail.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -29,6 +30,7 @@ import { UsersModule } from './users/users.module';
     AvatarsModule,
     FriendsModule,
     AuthModule,
+    MailModule,
   ],
   controllers: [AppController, AvatarsController],
   providers: [AppService],

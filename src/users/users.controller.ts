@@ -1,3 +1,4 @@
+import { MailService } from './../mail/mail.service';
 import { ParseIntMinMaxPipe } from './../pipes/parseIntMinMax.pipe';
 import {
   Body,
@@ -43,5 +44,10 @@ export class UsersController {
   @Post('/')
   async addUser(@Body() createUserDto: CreateUserDto) {
     return await this.usersService.addUser(createUserDto);
+  }
+
+  @Patch('/emailVerification/:token')
+  async verifyMail(@Param('token') token: string) {
+    return await this.usersService.verifyMail(token);
   }
 }
