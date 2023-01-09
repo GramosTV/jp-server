@@ -12,9 +12,8 @@ import { AuthController } from './auth.controller';
   imports: [
     forwardRef(() => UsersModule),
     PassportModule,
-    UsersModule,
     JwtModule.register({
-      secret: jwtConstants.secret,
+      secret: jwtConstants.emailSecret,
       signOptions: { expiresIn: '999d' },
     }),
   ],
